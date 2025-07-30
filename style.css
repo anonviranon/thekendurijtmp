@@ -1,0 +1,369 @@
+/* ===== GENERAL SETUP & FONTS ===== */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-family: 'Garamond', serif;
+    background-color: #000;
+    overflow: hidden; /* Prevent scrolling on the body itself */
+}
+
+/* ===== PAGE STRUCTURE ===== */
+#page1, #page2 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#page1 {
+    background-color: #000;
+    opacity: 1;
+    transition: opacity 1.5s ease-in-out;
+    z-index: 100; /* Highest z-index to be on top initially */
+}
+
+#page2 {
+    color: #fff;
+    text-align: center;
+    z-index: 1; /* Below page1 */
+}
+
+/* ===== BACKGROUNDS & OVERLAYS ===== */
+#static-rose,
+#blooming-rose-video,
+#page2-background-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 100%;
+    min-height: 100%;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+}
+
+#static-rose {
+    cursor: pointer;
+    z-index: 1;
+}
+
+#blooming-rose-video {
+    display: none; /* Hidden until clicked */
+    z-index: 2;
+}
+
+#page2-background-video {
+    z-index: 1;
+}
+
+/* ===== SCROLLABLE CONTENT AREA ===== */
+.scroll-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto; /* This makes the content scrollable */
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+    box-sizing: border-box;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+.header-image {
+    width: 40%;
+    max-width: 175px;
+    margin-top: 5vh;
+    margin-bottom: 20px;
+}
+
+.invitation-content {
+    animation: fadeIn 2.5s ease-out;
+    padding: 0 20px; /* Prevents text from touching screen edges */
+}
+
+.poem {
+    font-family: 'Times New Roman', serif;
+    font-size: 1.2em;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+h2 { font-size: clamp(2.2rem, 10vw, 3rem); margin: 10px 0; }
+h3 { font-size: clamp(1.5rem, 8vw, 2.5rem); margin: 10px 0; }
+p { margin: 10px 0; }
+
+#attendance-counter {
+    margin: 20px 0;
+    font-size: 1.5em; /* Increased size */
+    color: gold;      /* Set color to gold */
+    font-weight: bold; /* Make it bold */
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.8); /* Add text shadow for depth */
+}
+
+#calendar-button-container {
+    margin: 25px auto;
+    width: 50%;
+    max-width: 110px;
+    cursor: pointer;
+}
+
+#calendar-button-image {
+    width: 100%;
+    display: block;
+    border-radius: 12px;
+}
+
+#countdown-timer {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 25px auto;
+}
+#countdown-timer > div {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.25);
+    min-width: 55px;
+}
+#countdown-timer span:first-child {
+    font-size: clamp(1.8rem, 5vw, 2.2rem);
+    font-weight: bold;
+}
+#countdown-timer span:last-child {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    margin-top: 5px;
+}
+
+.scroll-spacer {
+    height: 120px; /* Pushes content up from behind the icon bar */
+    flex-shrink: 0;
+}
+
+/* ===== BOTTOM ICON BAR ===== */
+.icon-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 15px 0;
+    padding-bottom: calc(15px + env(safe-area-inset-bottom)); /* For iPhone safe area */
+    z-index: 10;
+}
+
+.icon-container {
+    cursor: pointer;
+    padding: 10px;
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.icon {
+    font-size: clamp(24px, 7vw, 28px);
+    color: #fff;
+}
+
+.icon-label {
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+}
+
+
+/* ===== POPUPS ===== */
+.popup {
+    visibility: hidden;
+    opacity: 0;
+    display: flex;
+    position: absolute;
+    bottom: 105px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 400px;
+    background: rgba(20, 20, 20, 0.95);
+    padding: 20px;
+    border-radius: 15px;
+    z-index: 20;
+    transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    box-sizing: border-box;
+}
+
+.popup.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+.popup a {
+    text-decoration: none;
+    color: #ffffff;
+    transition: transform 0.2s ease-in-out;
+}
+.popup a:hover {
+    transform: scale(1.1);
+}
+.popup a i {
+    font-size: clamp(48px, 12vw, 60px);
+}
+
+.contact-link, .calendar-popup-style a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+.contact-link span, .calendar-popup-style span {
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+}
+
+.link-loading {
+    cursor: wait;
+    opacity: 0.5;
+}
+
+/* Styles for the full-screen tentative/schedule popup */
+.tentative-popup-container {
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    border-radius: 0;
+    background-color: rgba(0, 0, 0, 0.85); 
+    transform: translateY(100%); 
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out, visibility 0.5s ease-out;
+    padding: 10px;
+}
+
+.tentative-popup-container.active {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+.tentative-popup-container .tentative-image {
+    max-width: 95vw;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 35px;
+    font-weight: bold;
+    color: #ffffff;
+    cursor: pointer;
+    z-index: 22;
+    text-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
+}
+
+/* ===== RSVP VIDEO POPUP STYLES ===== */
+.rsvp-popup-style {
+    background: transparent; /* Override the default popup background */
+    padding: 0; /* Override the default popup padding */
+    border: none; /* Remove any border from the container */
+    box-shadow: none; /* Remove any shadow from the container */
+    max-width: 320px; /* Control the size of the popup */
+}
+
+/* Apply the blinking border directly to the link wrapping the video */
+.rsvp-popup-style a {
+    display: block;
+    border-radius: 16px; /* Rounded corners */
+    overflow: hidden; /* Ensures the video corners are clipped */
+    border: 4px solid gold;
+    animation: blink-border 1.5s linear infinite;
+    line-height: 0; /* Prevents extra space if the link has height */
+}
+
+.gala-video {
+    width: 100%;
+    display: block;
+}
+
+/* ===== MARQUEE TEXT ON PAGE 1 ===== */
+.marquee-container {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    color: rgba(255, 255, 255, 0.6);
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.marquee-top { top: 0%; }
+.marquee-bottom { bottom: 0%; }
+
+.marquee-text {
+    display: inline-block;
+    white-space: nowrap;
+    animation-duration: 25s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+.marquee-top .marquee-text { animation-name: scroll-right-to-left; }
+.marquee-bottom .marquee-text { animation-name: scroll-left-to-right; }
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+@keyframes scroll-right-to-left {
+    from { transform: translateX(100vw); }
+    to   { transform: translateX(-100%); }
+}
+
+@keyframes scroll-left-to-right {
+    from { transform: translateX(-100%); }
+    to   { transform: translateX(100vw); }
+}
+
+@keyframes blink-border {
+    0%   { border-color: #FFD700; box-shadow: 0 0 15px #FFD700; } /* Gold */
+    50%  { border-color: #FF69B4; box-shadow: 0 0 15px #FF69B4; } /* Hot Pink */
+    100% { border-color: #FFD700; box-shadow: 0 0 15px #FFD700; } /* Gold */
+}
+
+/* ===== MOBILE ADJUSTMENTS ===== */
+@media (max-width: 768px) {
+    .popup a i {
+        font-size: 40px;
+    }
+    #countdown-timer > div {
+        min-width: 45px;
+        padding: 8px;
+    }
+    #countdown-timer span:first-child {
+        font-size: 1.8rem;
+    }
+}
